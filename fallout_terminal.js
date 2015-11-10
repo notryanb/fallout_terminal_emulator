@@ -1,13 +1,74 @@
 "use strict";
 
-var wordBank = [
-  'CAREERS', 'WEDDINGS',
-  'WORDING', 'CASUALS',
-  'MAGGIES', 'CATMANS'
-  ]
 
-var randomWord = Math.floor(Math.random() * wordBank.length);
-var password = wordBank[randomWord];
+var gameBoard = {
+  board: [],
+}
+
+function generateBoard(difficulty){
+  var wordBank = [
+    'CAREERS', 'WEDDING',
+    'WORDING', 'CASUALS',
+    'MAGGIES', 'CATMANS',
+    'ASDJEKD', 'VNEOQKD',
+    'IEKFHDP', 'FSOIBEF',
+    'FBSIWKF', 'LDKSMEK',
+    'LDMSKRI', 'QWERTYU'
+    ];
+  var filler = "!@#$%^&*()_+-=}{[]';/.:?>,<\|".split(''); 
+  var wordCount = 12;
+  var rows = 17;
+  var board = gameBoard.board;
+
+  // console.log('Game Board:' + board);
+
+  for (var idx = 0; idx < 12; idx++){
+    board.push(wordBank.pop()); 
+  }
+
+  // console.log('Game Board After Loop:' + board + board.length);
+
+  var onlyWord = board.join('').split('');
+  // console.log('Only Word: ' + onlyWord + onlyWord.length);
+
+  var leftoverSpaces = (wordCount * rows) - onlyWord.length;
+  // console.log('leftoverSpaces:' + leftoverSpaces);
+
+  for (var i = 0; i < leftoverSpaces; i++) {
+    var randomIdx = Math.floor(Math.random() * filler.length);
+    board.push(filler[randomIdx]);
+  }
+
+  shuffleArray(board);
+  console.log(board);
+  return board;
+}
+
+/**
+ * Randomize array element order in-place.
+ * Using Durstenfeld shuffle algorithm.
+ */
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+
+
+function flattenArray(arr){
+  // Flatten the array 
+  var flattened = arr.reduce(function(a, b) {
+    return a.concat(b);
+  }, []);
+}
+
+
+// var randomWord = Math.floor(Math.random() * wordBank.length);
+// var password = wordBank[randomWord];
 
 
 var compareWords = function(choice){
@@ -30,14 +91,12 @@ function appendWordsToHTML(arr) {
 }
 
 document.addEventListener("DOMContentLoaded", function(event) { 
-  appendWordsToHTML(wordBank);
+  // appendWordsToHTML(wordBank);
   //do work
+  console.log(generateBoard());
 });
 
 
-console.log(randomWord);
-console.log(password);
-console.log(compareWords('MAGGIES') + '/' + password.length);
 
 /*
       ===================================
