@@ -3,6 +3,8 @@
 
 var gameBoard = {
   board: [],
+  boardLeft: [];
+  boardRight: [];
 }
 
 function generateBoard(difficulty){
@@ -83,15 +85,15 @@ var compareWords = function(choice){
 }
 
 function appendWordsToHTML(arr) {
-  var screen = document.getElementById('container');
+  var screen = document.getElementById('left-terminal');
   for (var idx = 0; idx < arr.length; idx++){
     console.log(idx);
-    screen.innerHTML +='<div>' + arr[idx] + '</div';
+    screen.innerHTML +='<span>' + arr[idx] + '</span>';
   }
 }
 
 document.addEventListener("DOMContentLoaded", function(event) { 
-  // appendWordsToHTML(wordBank);
+  appendWordsToHTML(generateBoard());
   //do work
   console.log(generateBoard());
 });
@@ -108,9 +110,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
   - Load content and start game (document.addEventListener)
     => Menu choice for 1337 mode and stock terminal
     => Difficulty Select {
-        easy: 9 Words, 5 Characters,
+        easy: 8 Words, 5 Characters,
         medium: 12 Words, 7 Characters,
-        hard: 15 Words, 11 Characters
+        hard: 18 Words, 11 Characters
       }
 
   - Word Bank
@@ -127,6 +129,9 @@ document.addEventListener("DOMContentLoaded", function(event) {
         takes board and filler, then randomizes placement
         look into keeping passwords evenly spaced with extra method
       }
+    => Left & Right Boards, splitBoard {
+          takes board and divides into array with 2 halfs.
+        }
     => 2x17x12 = 408 chars for total board length flattened
     => Each 'row' is a 2D array that flattens to 12 characters long. 
     => word wrap for when p/w goes over

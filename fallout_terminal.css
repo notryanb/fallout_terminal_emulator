@@ -1,10 +1,28 @@
 body {
   background-color: #797979;
+  font-size: 1.6em;
 }
 
 #container {
-  width: 500px;
+  width: 700px;
   height: 400px;
   background: #efefef;
   border: 1px solid #000;
+  margin: auto;
+}
+
+#left-terminal {
+  word-wrap: break-word;
+  display: inline-block;
+  background: blue;
+  width: 310px;
+  height: 190px;
+}
+
+#right-terminal {
+  word-wrap: break-word;
+  display: inline-block;
+  background: red;
+  width: 310px;
+  height: 190px;
 }
