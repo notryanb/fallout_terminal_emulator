@@ -1,65 +1,67 @@
 "use strict";
 
-
-var gameBoard = {
-  board: [],
-  boardLeft: [];
-  boardRight: [];
+function GameBoard() {
+  this.board = [];
 }
 
-function generateBoard(difficulty){
-  var wordBank = [
-    'CAREERS', 'WEDDING',
-    'WORDING', 'CASUALS',
-    'MAGGIES', 'CATMANS',
-    'ASDJEKD', 'VNEOQKD',
-    'IEKFHDP', 'FSOIBEF',
-    'FBSIWKF', 'LDKSMEK',
-    'LDMSKRI', 'QWERTYU'
-    ];
-  var filler = "!@#$%^&*()_+-=}{[]';/.:?>,<\|".split(''); 
-  var wordCount = 12;
-  var rows = 17;
-  var board = gameBoard.board;
+GameBoard.prototype.echoBack = function() {
+  return console.log('GameBoard prototype');
+};
 
-  // console.log('Game Board:' + board);
+var wordBank = {
+    words: [
+      'CAREERS', 'WEDDING',
+      'WORDING', 'CASUALS',
+      'MAGGIES', 'CATMANS',
+      'ASDJEKD', 'VNEOQKD',
+      'IEKFHDP', 'FSOIBEF',
+      'FBSIWKF', 'LDKSMEK',
+      'LDMSKRI', 'QWERTYU'
+      ],
+  filler: "!@#$%^&*()_+-=}{[]';/.:?>,<\|".split(''),
+
+  /**
+   * Randomize array element order in-place.
+   * Using Durstenfeld shuffle algorithm.
+   */
+  shuffleArray: function(array) {
+      for (var i = array.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var temp = array[i];
+          array[i] = array[j];
+          array[j] = temp;
+      }
+      return array;
+  }
+}
+
+GameBoard.prototype.generateBoard = function(){
 
   for (var idx = 0; idx < 12; idx++){
-    board.push(wordBank.pop()); 
+    this.board.push(wordBank.words.pop()); 
   }
 
-  // console.log('Game Board After Loop:' + board + board.length);
+  this.displayBoard(this.board);
 
-  var onlyWord = board.join('').split('');
+  // var onlyWord = board.join('').split('');
   // console.log('Only Word: ' + onlyWord + onlyWord.length);
 
-  var leftoverSpaces = (wordCount * rows) - onlyWord.length;
+  // var leftoverSpaces = (wordCount * rows) - onlyWord.length;
   // console.log('leftoverSpaces:' + leftoverSpaces);
 
-  for (var i = 0; i < leftoverSpaces; i++) {
-    var randomIdx = Math.floor(Math.random() * filler.length);
-    board.push(filler[randomIdx]);
+  // for (var i = 0; i < leftoverSpaces; i++) {
+  //   var randomIdx = Math.floor(Math.random() * filler.length);
+  //   board.push(filler[randomIdx]);
+  // }
+
+  wordBank.shuffleArray(this.board);
+  this.displayBoard(this.board);
+  // return this.board;
+}
+
+  GameBoard.prototype.displayBoard = function(board) {
+    console.log(board);
   }
-
-  shuffleArray(board);
-  console.log(board);
-  return board;
-}
-
-/**
- * Randomize array element order in-place.
- * Using Durstenfeld shuffle algorithm.
- */
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-    return array;
-}
-
 
 function flattenArray(arr){
   // Flatten the array 
@@ -72,30 +74,30 @@ function flattenArray(arr){
 // var randomWord = Math.floor(Math.random() * wordBank.length);
 // var password = wordBank[randomWord];
 
+// var compareWords = function(choice){
+//   var commonChars = 0;
 
-var compareWords = function(choice){
-  var commonChars = 0;
+//   for (var i = 0; i < password.length; i++){
+//     if (choice[i] == password[i]){
+//       commonChars++;
+//     }
+//   }
+//   return commonChars;
+// }
 
-  for (var i = 0; i < password.length; i++){
-    if (choice[i] == password[i]){
-      commonChars++;
-    }
-  }
-  return commonChars;
-}
-
-function appendWordsToHTML(arr) {
-  var screen = document.getElementById('left-terminal');
-  for (var idx = 0; idx < arr.length; idx++){
-    console.log(idx);
-    screen.innerHTML +='<span>' + arr[idx] + '</span>';
-  }
-}
+// function appendWordsToHTML(arr) {
+//   var screen = document.getElementById('left-terminal');
+//   for (var idx = 0; idx < arr.length; idx++){
+//     console.log(idx);
+//     screen.innerHTML +='<span>' + arr[idx] + '</span>';
+//   }
+// }
 
 document.addEventListener("DOMContentLoaded", function(event) { 
-  appendWordsToHTML(generateBoard());
+  // appendWordsToHTML(generateBoard());
   //do work
-  console.log(generateBoard());
+  var newGame = new GameBoard();
+  newGame.generateBoard();
 });
 
 
