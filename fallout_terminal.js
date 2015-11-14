@@ -4,9 +4,6 @@ function GameBoard() {
   this.board = [];
 }
 
-GameBoard.prototype.echoBack = function() {
-  return console.log('GameBoard prototype');
-};
 
 var wordBank = {
     words: [
@@ -35,13 +32,15 @@ var wordBank = {
   }
 }
 
+GameBoard.prototype.echoBack = function() {
+  return console.log('GameBoard prototype');
+};
+
 GameBoard.prototype.generateBoard = function(){
 
   for (var idx = 0; idx < 12; idx++){
     this.board.push(wordBank.words.pop()); 
   }
-
-  this.displayBoard(this.board);
 
   // var onlyWord = board.join('').split('');
   // console.log('Only Word: ' + onlyWord + onlyWord.length);
@@ -60,7 +59,20 @@ GameBoard.prototype.generateBoard = function(){
 }
 
   GameBoard.prototype.displayBoard = function(board) {
-    console.log(board);
+    var boardStr = "";
+    for (var i = 0; i < board.length; i++){
+      var word = board[i];
+      if (word.length > 1) {
+        var letters = word.split('');
+        for (var letter = 0; letter < letters.length; letter++){
+          boardStr += '<span data-word='+word+'">'+word[letter]+'</span>'
+        }
+      } else {
+        boardStr += '<span data-word='+word+'">'+word+'</span>'
+      }
+    }
+    console.log(boardStr);
+    return boardStr;
   }
 
 function flattenArray(arr){
