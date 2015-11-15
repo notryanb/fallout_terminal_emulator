@@ -1,9 +1,5 @@
 "use strict";
 
-function GameBoard() {
-  this.board = [];
-}
-
 
 var wordBank = {
     words: [
@@ -15,7 +11,7 @@ var wordBank = {
       'FBSIWKF', 'LDKSMEK',
       'LDMSKRI', 'QWERTYU'
       ],
-  filler: "!@#$%^&*()_+-=}{[]';/.:?>,<\|".split(''),
+  filler: "!@#$%^&*()_+-=}{[]<>;/.:?,\|".split(''),
 
   /**
    * Randomize array element order in-place.
@@ -32,30 +28,30 @@ var wordBank = {
   }
 }
 
-GameBoard.prototype.echoBack = function() {
-  return console.log('GameBoard prototype');
-};
+function GameBoard() {
+  this.board = [];
+}
 
 GameBoard.prototype.generateBoard = function(){
+
+  var charLength = {
+    med: 432
+  }
 
   for (var idx = 0; idx < 12; idx++){
     this.board.push(wordBank.words.pop()); 
   }
 
-  // var onlyWord = board.join('').split('');
-  // console.log('Only Word: ' + onlyWord + onlyWord.length);
+  var onlyWord = this.board.join('').split('');
+  var leftoverSpaces = charLength.med - onlyWord.length;
 
-  // var leftoverSpaces = (wordCount * rows) - onlyWord.length;
-  // console.log('leftoverSpaces:' + leftoverSpaces);
-
-  // for (var i = 0; i < leftoverSpaces; i++) {
-  //   var randomIdx = Math.floor(Math.random() * filler.length);
-  //   board.push(filler[randomIdx]);
-  // }
+  for (var i = 0; i < leftoverSpaces; i++) {
+    var randomIdx = Math.floor(Math.random() * wordBank.filler.length);
+    this.board.push(wordBank.filler[randomIdx]);
+  }
 
   wordBank.shuffleArray(this.board);
-  this.displayBoard(this.board);
-  // return this.board;
+  return this.displayBoard(this.board);
 }
 
   GameBoard.prototype.displayBoard = function(board) {
@@ -65,13 +61,12 @@ GameBoard.prototype.generateBoard = function(){
       if (word.length > 1) {
         var letters = word.split('');
         for (var letter = 0; letter < letters.length; letter++){
-          boardStr += '<span data-word='+word+'">'+word[letter]+'</span>'
+          boardStr += '<span data-word='+word+'>'+word[letter]+'</span>'
         }
       } else {
-        boardStr += '<span data-word='+word+'">'+word+'</span>'
+        boardStr += '<span data-word='+word+'>'+word+'</span>'
       }
     }
-    console.log(boardStr);
     return boardStr;
   }
 
@@ -97,19 +92,17 @@ function flattenArray(arr){
 //   return commonChars;
 // }
 
-// function appendWordsToHTML(arr) {
-//   var screen = document.getElementById('left-terminal');
-//   for (var idx = 0; idx < arr.length; idx++){
-//     console.log(idx);
-//     screen.innerHTML +='<span>' + arr[idx] + '</span>';
-//   }
-// }
+function appendWordsToHTML(boardStr) {
+  var doc = document.getElementById('left-terminal');
+  doc.innerHTML += boardStr;
+}
 
 document.addEventListener("DOMContentLoaded", function(event) { 
   // appendWordsToHTML(generateBoard());
   //do work
   var newGame = new GameBoard();
-  newGame.generateBoard();
+  var board = newGame.generateBoard();
+  appendWordsToHTML(board);
 });
 
 
