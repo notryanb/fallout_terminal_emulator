@@ -1,6 +1,7 @@
 body {
   background-color: #797979;
   font-size: 1.3em;
+  font-family: Courier;
 }
 
 #container {
@@ -11,7 +12,7 @@ body {
   margin: auto;
 }
 
-#left-terminal {
+/*#left-terminal {
   word-wrap: break-word;
   display: inline-block;
   background: blue;
@@ -20,9 +21,27 @@ body {
 }
 
 #right-terminal {
-  word-wrap: break-word;
   display: inline-block;
   background: red;
   width: 310px;
   height: 190px;
+}*/
+
+#layout {
+   -ms-word-break: break-all;
+     word-break: break-all;
+
+     /* Non standard for webkit */
+     word-break: break-word;
+
+-webkit-hyphens: auto;
+   -moz-hyphens: auto;
+    -ms-hyphens: auto;
+        hyphens: auto;
+  /*display: inline-block;*/
+  overflow: auto;
+
+  -webkit-column-count: 2; /* Chrome, Safari, Opera */
+  -moz-column-count: 2; /* Firefox */
+  column-count: 2;
 }

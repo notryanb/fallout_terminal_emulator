@@ -43,7 +43,7 @@ GameBoard.prototype.generateBoard = function(){
   }
 
   var onlyWord = this.board.join('').split('');
-  var leftoverSpaces = charLength.med - onlyWord.length;
+  var leftoverSpaces = (charLength.med - onlyWord.length) * 2;
 
   for (var i = 0; i < leftoverSpaces; i++) {
     var randomIdx = Math.floor(Math.random() * wordBank.filler.length);
@@ -64,7 +64,7 @@ GameBoard.prototype.generateBoard = function(){
           boardStr += '<span data-word='+word+'>'+word[letter]+'</span>'
         }
       } else {
-        boardStr += '<span data-word='+word+'>'+word+'</span>'
+        boardStr += "<span data-word='"+word+"'>"+word+"</span>"
       }
     }
     return boardStr;
@@ -93,7 +93,7 @@ function flattenArray(arr){
 // }
 
 function appendWordsToHTML(boardStr) {
-  var doc = document.getElementById('left-terminal');
+  var doc = document.getElementById('layout');
   doc.innerHTML += boardStr;
 }
 
