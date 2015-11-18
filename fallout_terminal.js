@@ -6,12 +6,13 @@ var wordBank = {
       'CAREERS', 'WEDDING',
       'WORDING', 'CASUALS',
       'MAGGIES', 'CATMANS',
-      'ASDJEKD', 'VNEOQKD',
+      'COMPUTE', 'VNEOQKD',
       'IEKFHDP', 'FSOIBEF',
       'FBSIWKF', 'LDKSMEK',
       'LDMSKRI', 'QWERTYU'
       ],
-  filler: "!@#$%^&*()_+-=}{[]<>;/.:?,\|".split(''),
+  filler: "!@#$%^&*_+-=;/.:?,\|".split(''),
+  brackets: [ "[]", "{}", "<>", "()" ],
 
   /**
    * Randomize array element order in-place.
@@ -34,41 +35,66 @@ function GameBoard() {
 
 GameBoard.prototype.generateBoard = function(){
 
-  var charLength = {
-    med: 432
+  var boardLength = 12 * 17 * 2; // 12 chars, 17 rows, 2 columns
+  var wordCount = 10;
+
+  // Put 10 words in an array
+  for (var idx = 0; idx < wordCount; idx++){
+    var word = wordBank.words.pop();
+    var formattedWord = this.htmlFormatWords(word);
+    this.board.push(formattedWord); 
   }
+  
+  console.log(this.board);
 
-  for (var idx = 0; idx < 12; idx++){
-    this.board.push(wordBank.words.pop()); 
-  }
+  // var onlyWord = this.board.join('').split('');
+  // var leftoverSpaces = boardLength - onlyWord.length;
 
-  var onlyWord = this.board.join('').split('');
-  var leftoverSpaces = (charLength.med - onlyWord.length) * 2;
+  // for (var i = 0; i < leftoverSpaces; i++) {
+  //   var randomIdx = Math.floor(Math.random() * wordBank.filler.length);
+  //   this.board.push(wordBank.filler[randomIdx]);
+  // }
 
-  for (var i = 0; i < leftoverSpaces; i++) {
-    var randomIdx = Math.floor(Math.random() * wordBank.filler.length);
-    this.board.push(wordBank.filler[randomIdx]);
-  }
-
-  wordBank.shuffleArray(this.board);
-  return this.displayBoard(this.board);
+  // wordBank.shuffleArray(this.board);
+  // return this.displayBoard(this.board);
 }
 
-  GameBoard.prototype.displayBoard = function(board) {
-    var boardStr = "";
-    for (var i = 0; i < board.length; i++){
-      var word = board[i];
-      if (word.length > 1) {
-        var letters = word.split('');
-        for (var letter = 0; letter < letters.length; letter++){
-          boardStr += '<span data-word='+word+'>'+word[letter]+'</span>'
-        }
-      } else {
-        boardStr += "<span data-word='"+word+"'>"+word+"</span>"
-      }
+// Takes in a word and outputs an array with each index formatted
+GameBoard.prototype.htmlFormatWords = function(word) {
+    var chars = word.split('');
+    var wordArr = [];
+    for (var i = 0; i < chars.length; i++) {
+      var formatted = '<span class="character word" data-word='+word+'>'+chars[i]+'</span>'
+      wordArr.push(formatted);
     }
-    return boardStr;
+    return wordArr;
+}
+
+GameBoard.prototype.insertLineBreaks = function(board) {
+  var boardChars = this.board.join('').split('');
+
+  for (var i = 0; i < boardChars.length; i += 12){
+    boardChars.push('<br />');
   }
+
+  return boardChars;
+}
+
+// GameBoard.prototype.displayBoard = function(board) {
+//   var boardStr = "";
+//   for (var i = 0; i < board.length; i++){
+//     var word = board[i];
+//     if (word.length > 1) {
+//       var letters = word.split('');
+//       for (var letter = 0; letter < letters.length; letter++){
+//         boardStr += '<span data-word='+word+'>'+word[letter]+'</span>'
+//       }
+//     } else {
+//       boardStr += "<span data-word='"+word+"'>"+word+"</span>"
+//     }
+//   }
+//   return boardStr;
+// }
 
 function flattenArray(arr){
   // Flatten the array 
@@ -92,9 +118,11 @@ function flattenArray(arr){
 //   return commonChars;
 // }
 
-function appendWordsToHTML(boardStr) {
-  var doc = document.getElementById('layout');
-  doc.innerHTML += boardStr;
+function appendWordsToHTML(boardCols) {
+  // var boardCols[2] = document.getElementById('code-column-one');
+  // var boardCols[1] = document.getElementById('code-column-one');
+  // codeOne.innerHTML += leftArr;
+  // codeTwo.innerHTML += rightArr
 }
 
 document.addEventListener("DOMContentLoaded", function(event) { 
@@ -102,7 +130,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
   //do work
   var newGame = new GameBoard();
   var board = newGame.generateBoard();
-  appendWordsToHTML(board);
+  // appendWordsToHTML(board);
 });
 
 
