@@ -42,8 +42,10 @@ var shuffleArray = function(array) {
 }
 
 var FillWordColumns = function() {
-  return generateBoard();
+  var column1 = document.getElementById('code-column-one');
+  column1.innerHTML += generateBoard();
 };
+
 var FillPointerColumns = function() {};
 
 
@@ -62,13 +64,10 @@ var generateBoard = function(){
     board.push(duds[i]);
   }
   
+  GarbageCharacterFill(board);
   shuffleArray(board);
-
   var flatArr = flattenArray(board);
-  console.log(flatArr);
-  console.log(board.length);
-  GarbageCharacterFill();
-
+  return flatArr.join('');
 }
 
 // Takes in a word and outputs an array with each index formatted
@@ -82,10 +81,24 @@ var htmlFormatWords = function(word) {
     return wordArr;
 }
 
+var htmlFormatDuds = function() {
+  var rndChar = fillerChars[Math.floor(Math.random() * fillerChars.length)];
+  var chrStr = '<span class=character>' + rndChar + '</span>'
+
+  return chrStr
+}
+
+var htmlFormatDudEnd = function(bracket) {
+  return '<span class="character dudEnd">' + bracket + '</span>';
+}
+
 var GarbageCharacterFill = function(board) {
   var currentBoard = board.length;
-  var leftOverSpaces = board.boardLength - currentBoard; 
-  console.log(board.boardLength);
+  var leftOverSpaces = boardLength - currentBoard; 
+  for (var i = 0; i < leftOverSpaces; i++) {
+    board.push(fillerChars[Math.floor(Math.random() * fillerChars.length)]);
+  }
+  return board;
 }
 
 var GenerateDudList = function() {
@@ -101,11 +114,12 @@ var GenerateDudList = function() {
       var start = 1;
 
       while (start < dudLength) {
-        freshDud.push(fillerChars[Math.floor(Math.random() * fillerChars.length)]);
+        freshDud.push(htmlFormatDuds());
         start++;
       }
-      freshDud.unshift(rndBrackets[0]);
-      freshDud.push(rndBrackets[1]);
+
+      freshDud.unshift(htmlFormatDudEnd(rndBrackets[0]));
+      freshDud.push(htmlFormatDudEnd(rndBrackets[1]));
       dudArr.push(freshDud);
     } else {
       var rndBrackets = bracketChars[Math.floor(Math.random() * bracketChars.length)].split('');
