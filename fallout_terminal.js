@@ -4,6 +4,7 @@ var columnWidth = 12;
 var columnHeight = 17;
 var wordColumns = 2;
 var maxDudLength = 6;
+var boardLength = columnWidth * columnHeight * wordColumns; 
 
 var wordBank =  [
       'CAREERS', 'WEDDING',
@@ -15,8 +16,16 @@ var wordBank =  [
       'LDMSKRI', 'QWERTYU'
       ];
 
-var filler = "!@#$%^&*_+-=;/.:?,\|".split('');
-var brackets =  [ "[]", "{}", "<>", "()" ];
+var fillerChars = "!@#$%^&*_+-=;/.:?,\|".split('');
+var bracketChars =  [ "[]", "{}", "<>", "()" ];
+
+
+document.addEventListener("DOMContentLoaded", function(event) { 
+  FillWordColumns();
+  FillPointerColumns();
+
+  var RemainingAttemps = 4;
+});
 
   /**
    * Randomize array element order in-place.
@@ -32,28 +41,38 @@ var shuffleArray = function(array) {
     return array;
 }
 
-function GameBoard() {
-  this.board = [];
-}
+var FillWordColumns = function() {
+  return generateBoard();
+};
+var FillPointerColumns = function() {};
 
-GameBoard.prototype.generateBoard = function(){
 
-  var boardLength = columnWidth * columnHeight * wordColumns;
+var generateBoard = function(){
   var wordCount = 10;
+  var board = [];
 
   for (var idx = 0; idx < wordCount; idx++){
     var word = wordBank.pop();
-    var formattedWord = this.htmlFormatWords(word);
-    this.board.push(formattedWord); 
+    var formattedWord = htmlFormatWords(word);
+    board.push(formattedWord); 
+  }
+
+  var duds = GenerateDudList();
+  for (var i = 0; i < duds.length; i++ ) {
+    board.push(duds[i]);
   }
   
-  var flatArr = flattenArray(this.board);
-  // console.log(flatArr);
-  console.log(this.GenerateDudList());
+  shuffleArray(board);
+
+  var flatArr = flattenArray(board);
+  console.log(flatArr);
+  console.log(board.length);
+  GarbageCharacterFill();
+
 }
 
 // Takes in a word and outputs an array with each index formatted
-GameBoard.prototype.htmlFormatWords = function(word) {
+var htmlFormatWords = function(word) {
     var chars = word.split('');
     var wordArr = [];
     for (var i = 0; i < chars.length; i++) {
@@ -63,7 +82,13 @@ GameBoard.prototype.htmlFormatWords = function(word) {
     return wordArr;
 }
 
-GameBoard.prototype.GenerateDudList = function() {
+var GarbageCharacterFill = function(board) {
+  var currentBoard = board.length;
+  var leftOverSpaces = board.boardLength - currentBoard; 
+  console.log(board.boardLength);
+}
+
+var GenerateDudList = function() {
   // Generates 10 duds of varying lengths and returns them in an array
   var dudCount = 10;
   var dudArr = [];
@@ -72,26 +97,26 @@ GameBoard.prototype.GenerateDudList = function() {
     var dudLength = Math.floor(Math.random() * maxDudLength) + 2;
     if (dudLength > 2) {
       var freshDud = [];
-      var rndBrackets = brackets[Math.floor(Math.random() * brackets.length)].split('');
+      var rndBrackets = bracketChars[Math.floor(Math.random() * bracketChars.length)].split('');
       var start = 1;
 
       while (start < dudLength) {
-        freshDud.push(filler[Math.floor(Math.random() * filler.length)]);
+        freshDud.push(fillerChars[Math.floor(Math.random() * fillerChars.length)]);
         start++;
       }
       freshDud.unshift(rndBrackets[0]);
       freshDud.push(rndBrackets[1]);
       dudArr.push(freshDud);
     } else {
-      var rndBrackets = brackets[Math.floor(Math.random() * brackets.length)].split('');
+      var rndBrackets = bracketChars[Math.floor(Math.random() * bracketChars.length)].split('');
       dudArr.push(rndBrackets);
     }
   }
   return dudArr;
 }
 
-GameBoard.prototype.insertLineBreaks = function(board) {
-  var boardChars = this.board.join('').split('');
+var insertLineBreaks = function(board) {
+  var boardChars = board.join('').split('');
 
   for (var i = 0; i < boardChars.length; i += 12){
     boardChars.push('<br />');
@@ -102,42 +127,10 @@ GameBoard.prototype.insertLineBreaks = function(board) {
 
 
 function flattenArray(arr){
-  // Flatten the array 
-  // var flattened = arr.reduce(function(a, b) {
-  //   return a.concat(b);
-  // }, []);
   return [].concat.apply([], arr);
 }
 
 
-// var randomWord = Math.floor(Math.random() * wordBank.length);
-// var password = wordBank[randomWord];
-
-// var compareWords = function(choice){
-//   var commonChars = 0;
-
-//   for (var i = 0; i < password.length; i++){
-//     if (choice[i] == password[i]){
-//       commonChars++;
-//     }
-//   }
-//   return commonChars;
-// }
-
-function appendWordsToHTML(boardCols) {
-  // var boardCols[2] = document.getElementById('code-column-one');
-  // var boardCols[1] = document.getElementById('code-column-one');
-  // codeOne.innerHTML += leftArr;
-  // codeTwo.innerHTML += rightArr
-}
-
-document.addEventListener("DOMContentLoaded", function(event) { 
-  // appendWordsToHTML(generateBoard());
-  //do work
-  var newGame = new GameBoard();
-  var board = newGame.generateBoard();
-  // appendWordsToHTML(board);
-});
 
 
 
