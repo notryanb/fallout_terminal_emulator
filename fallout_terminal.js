@@ -1,8 +1,11 @@
 "use strict";
 
+var columnWidth = 12;
+var columnHeight = 17;
+var wordColumns = 2;
+var maxDudLength = 6;
 
-var wordBank = {
-    words: [
+var wordBank =  [
       'CAREERS', 'WEDDING',
       'WORDING', 'CASUALS',
       'MAGGIES', 'CATMANS',
@@ -10,23 +13,23 @@ var wordBank = {
       'IEKFHDP', 'FSOIBEF',
       'FBSIWKF', 'LDKSMEK',
       'LDMSKRI', 'QWERTYU'
-      ],
-  filler: "!@#$%^&*_+-=;/.:?,\|".split(''),
-  brackets: [ "[]", "{}", "<>", "()" ],
+      ];
+
+var filler = "!@#$%^&*_+-=;/.:?,\|".split('');
+var brackets =  [ "[]", "{}", "<>", "()" ];
 
   /**
    * Randomize array element order in-place.
    * Using Durstenfeld shuffle algorithm.
    */
-  shuffleArray: function(array) {
-      for (var i = array.length - 1; i > 0; i--) {
-          var j = Math.floor(Math.random() * (i + 1));
-          var temp = array[i];
-          array[i] = array[j];
-          array[j] = temp;
-      }
-      return array;
-  }
+var shuffleArray = function(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
 }
 
 function GameBoard() {
@@ -35,28 +38,18 @@ function GameBoard() {
 
 GameBoard.prototype.generateBoard = function(){
 
-  var boardLength = 12 * 17 * 2; // 12 chars, 17 rows, 2 columns
+  var boardLength = columnWidth * columnHeight * wordColumns;
   var wordCount = 10;
 
-  // Put 10 words in an array
   for (var idx = 0; idx < wordCount; idx++){
-    var word = wordBank.words.pop();
+    var word = wordBank.pop();
     var formattedWord = this.htmlFormatWords(word);
     this.board.push(formattedWord); 
   }
   
-  console.log(this.board);
-
-  // var onlyWord = this.board.join('').split('');
-  // var leftoverSpaces = boardLength - onlyWord.length;
-
-  // for (var i = 0; i < leftoverSpaces; i++) {
-  //   var randomIdx = Math.floor(Math.random() * wordBank.filler.length);
-  //   this.board.push(wordBank.filler[randomIdx]);
-  // }
-
-  // wordBank.shuffleArray(this.board);
-  // return this.displayBoard(this.board);
+  var flatArr = flattenArray(this.board);
+  // console.log(flatArr);
+  console.log(this.GenerateDudList());
 }
 
 // Takes in a word and outputs an array with each index formatted
@@ -70,6 +63,33 @@ GameBoard.prototype.htmlFormatWords = function(word) {
     return wordArr;
 }
 
+GameBoard.prototype.GenerateDudList = function() {
+  // Generates 10 duds of varying lengths and returns them in an array
+  var dudCount = 10;
+  var dudArr = [];
+
+  for (var i = 0; i < dudCount; i++) {
+    var dudLength = Math.floor(Math.random() * maxDudLength) + 2;
+    if (dudLength > 2) {
+      var freshDud = [];
+      var rndBrackets = brackets[Math.floor(Math.random() * brackets.length)].split('');
+      var start = 1;
+
+      while (start < dudLength) {
+        freshDud.push(filler[Math.floor(Math.random() * filler.length)]);
+        start++;
+      }
+      freshDud.unshift(rndBrackets[0]);
+      freshDud.push(rndBrackets[1]);
+      dudArr.push(freshDud);
+    } else {
+      var rndBrackets = brackets[Math.floor(Math.random() * brackets.length)].split('');
+      dudArr.push(rndBrackets);
+    }
+  }
+  return dudArr;
+}
+
 GameBoard.prototype.insertLineBreaks = function(board) {
   var boardChars = this.board.join('').split('');
 
@@ -80,27 +100,13 @@ GameBoard.prototype.insertLineBreaks = function(board) {
   return boardChars;
 }
 
-// GameBoard.prototype.displayBoard = function(board) {
-//   var boardStr = "";
-//   for (var i = 0; i < board.length; i++){
-//     var word = board[i];
-//     if (word.length > 1) {
-//       var letters = word.split('');
-//       for (var letter = 0; letter < letters.length; letter++){
-//         boardStr += '<span data-word='+word+'>'+word[letter]+'</span>'
-//       }
-//     } else {
-//       boardStr += "<span data-word='"+word+"'>"+word+"</span>"
-//     }
-//   }
-//   return boardStr;
-// }
 
 function flattenArray(arr){
   // Flatten the array 
-  var flattened = arr.reduce(function(a, b) {
-    return a.concat(b);
-  }, []);
+  // var flattened = arr.reduce(function(a, b) {
+  //   return a.concat(b);
+  // }, []);
+  return [].concat.apply([], arr);
 }
 
 
