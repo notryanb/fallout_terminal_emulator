@@ -3,6 +3,7 @@ body {
   font-size: 1.3em;
   font-family: Courier;
   color: #00E513;
+  letter-spacing: 5px;
 }
 
 #container {
@@ -13,22 +14,9 @@ body {
   margin: auto;
 }
 
-
-#layout {
-   -ms-word-break: break-all;
-     word-break: break-all;
-
-     /* Non standard for webkit */
-     word-break: break-word;
-
--webkit-hyphens: auto;
-   -moz-hyphens: auto;
-    -ms-hyphens: auto;
-        hyphens: auto;
-  /*display: inline-block;*/
-  overflow: auto;
-
-  -webkit-column-count: 2; /* Chrome, Safari, Opera */
-  -moz-column-count: 2; /* Firefox */
-  column-count: 2;
+#container div {
+  word-wrap: break-word;
+  padding: 5px;
+  max-width: 250px;
+  display: inline-block;
 }

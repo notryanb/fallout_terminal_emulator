@@ -71,8 +71,13 @@ var generateBoard = function(){
   
   GarbageCharacterFill(board);
   shuffleArray(board);
-  var colOne = flattenArray(board.slice(0, board.length / 2)).join('');
-  var colTwo = flattenArray(board.slice(board.length / 2, -1)).join('');
+  var flattened = flattenArray(board);
+  var left = insertLineBreaks(flattened.slice(0, flattened.length / 2));
+  var right = insertLineBreaks(flattened.slice(flattened.length / 2));
+  console.log(left.length);
+  console.log(right.length);
+  var colOne = left.join('');
+  var colTwo = right.join('');
   return { colOne: colOne, colTwo: colTwo };
 }
 
@@ -136,13 +141,11 @@ var GenerateDudList = function() {
 }
 
 var insertLineBreaks = function(board) {
-  var boardChars = board.join('').split('');
-
-  for (var i = 0; i < boardChars.length; i += 12){
-    boardChars.push('<br />');
+  // var boardChars = board.join('').split('');
+  for (var i = 0; i < board.length; i += 11){
+    board.splice(i, 0, '<br />');
   }
-
-  return boardChars;
+  return board;
 }
 
 
