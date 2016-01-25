@@ -43,10 +43,15 @@ var shuffleArray = function(array) {
 
 var FillWordColumns = function() {
   var column1 = document.getElementById('code-column-one');
-  column1.innerHTML += generateBoard();
+  var column2 = document.getElementById('code-column-two');
+  var board = generateBoard();
+  column1.innerHTML += board.colOne;
+  column2.innerHTML += board.colTwo;
 };
 
-var FillPointerColumns = function() {};
+var FillPointerColumns = function() {
+  // This will return a bunch of 'memory pointers'
+};
 
 
 var generateBoard = function(){
@@ -66,8 +71,9 @@ var generateBoard = function(){
   
   GarbageCharacterFill(board);
   shuffleArray(board);
-  var flatArr = flattenArray(board);
-  return flatArr.join('');
+  var colOne = flattenArray(board.slice(0, board.length / 2)).join('');
+  var colTwo = flattenArray(board.slice(board.length / 2, -1)).join('');
+  return { colOne: colOne, colTwo: colTwo };
 }
 
 // Takes in a word and outputs an array with each index formatted
@@ -96,7 +102,7 @@ var GarbageCharacterFill = function(board) {
   var currentBoard = board.length;
   var leftOverSpaces = boardLength - currentBoard; 
   for (var i = 0; i < leftOverSpaces; i++) {
-    board.push(fillerChars[Math.floor(Math.random() * fillerChars.length)]);
+    board.push("<span>" + fillerChars[Math.floor(Math.random() * fillerChars.length)] + "</span>");
   }
   return board;
 }
