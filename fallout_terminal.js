@@ -1,4 +1,4 @@
-"use strict";
+
 
 var columnWidth = 12;
 var columnHeight = 17;
